@@ -1,5 +1,32 @@
 ---
 applications:
  - name: ibmlearner_translation_app
-   random-random: true
+   random-route: true
    memory: 64M
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-docker-demo-translator
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: flask-docker-demo-translator
+    spec:
+      containers:
+      - image: us.icr.io/kuberibm/flask-docker-demo-translator:lateset
+        imagePullPolicy: Always
+        name: 
+        ports:
+        - containerPort: 8080
+          name: http
+        resources:
+          limits:
+            cpu: 5m
+          requests:
+            cpu: 2m  
